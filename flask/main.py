@@ -22,7 +22,7 @@ app = Flask(__name__)
 @app.before_request
 def limit_remote_addr():
     ips = ["10.144.6.57"]
-    if not request.remote_addr in ips :
+    if request.remote_addr in ips :
         abort(403)
 
 @app.route("/")
