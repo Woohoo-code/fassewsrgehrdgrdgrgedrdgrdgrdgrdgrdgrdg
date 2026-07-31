@@ -2,15 +2,7 @@ from flask import Flask, render_template, request, jsonify, make_response, abort
 import sqlite3
 from cryptography.fernet import Fernet
 import json
-from flask import Flask
-from pathlib import Path
 
-from cryptography import x509
-from cryptography.x509.oid import NameOID
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
-
-from datetime import datetime, timedelta, UTC
 
 
 key = Fernet.generate_key()
@@ -142,4 +134,4 @@ def backend():
     print(visits)
     return setcookie(jsonify({"visits":visits}))
 
-app.run(host="0.0.0.0", port=5000, ssl_context=("cert.pem", "key.pem"))
+app.run(host="0.0.0.0", port=5000)
