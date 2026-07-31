@@ -82,13 +82,11 @@ def getcookie(number=1, template=None):
     if request.cookies.get("clicks") != None and number == 1:
         if number == 1:
             g=request.cookies.get("clicks")
-            print(g)
             y =  fernets.decrypt(g.encode())
             return json.loads(y.decode())
     elif request.cookies.get("cpc") != None and number == 2:
         if number == 2:
             g=request.cookies.get("cpc")
-            print(g)
             y =  fernets.decrypt(g.encode())
             return json.loads(y.decode())
     else:
