@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<title>Icepop Clicker (Beta)</title>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<body class="body">
+<div class="divcontainer2">
+<div class="divcontainer"><input class="icepopgrow" type="image" id="image" src={{ url_for('static', filename='Icepop2.png') }} onclick="clicker()"></input></div>
+
+<p class="nocursor"></p>
+<p class="nocursor" style="margin: 0; display: inline;" id="click">{{visits}}</p>
+<p class="nocursor" style="margin: 0; display: inline;" > Icepops</p>
+<p class="nocursor"></p>
+
+<script>
+
+function resize(){
+if (document.getElementById("image").classList.contains('icepopgrow')) {
+    document.getElementById("image").classList.replace("icepopgrow", "icepopshrink")
+
+
+}
+else {
+    document.getElementById("image").classList.replace("icepopshrink", "icepopgrow")
+
+
+}
+}
+</script>
+
+<script>
+async function getCookie() {
+let response = await fetch("/getcookies", {
+            method: "GET"})
+
+return await response.json() 
+ 
+}
+    
+
+async function clicker(){ 
+            let cookieee = await getCookie()
+            let visiter = cookieee.cookie
+            let clicksperclicks = cookieee.cookie1
+            visiter += clicksperclicks
+            let response = await fetch("/clickerbackend",  {
+                method: "POST",
+                body: JSON.stringify({clicks: clicksperclicks}),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            }
+        )
+                const data = await response.json()
+                document.getElementById("click").innerHTML = data.visits 
+                resize()
+                }
+    
+</script>
+<script>
+async function getCookie() {
+let response = await fetch("/getcookies", {
+            method: "GET"
+
+})
+return await response.json() 
+ 
+}
+let clicksperclick = {{clicks}}
+let cookiee = getCookie()
+console.log(cookiee)
+async function buy(clicks, price, event) {
+
+    event.preventDefault()
+    
+    let visitere = document.getElementById("click").innerHTML
+    console.log(visitere)
+    if (visitere >= price){
+        clicksperclick+=clicks
+        visitere -= price
+            let response = await fetch("/clickerbuybackend",  {
+                method: "POST",
+                body: JSON.stringify({"spent": price, "clicks": clicksperclick}),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            }
+            
+        )
+            const data = await response.json()
+            document.getElementById("click").innerHTML = data.visits
+
+    }
+}
+let visiterr = {{visits}}
+async function rebirth(event){
+
+event.preventDefault()
+
+if (visiterr >= 10000){
+
+        visiterr = 0
+            let response = await fetch("/clickerbuybackend",  {
+                method: "POST",
+                body: JSON.stringify({"spent": 0, "clicks": 1}),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            }
+            
+        )
+            const data = await response.json()
+            document.getElementById("click").innerHTML = 0
+
+}
+
+
+}
+
+
+</script>
+
+<form class="button1" onsubmit="buy(1, 100, event)"><button class="button1" type="submit">Buy +1 icepop per click for 100 icepops</button></form>
+<p class="nocursor"></p>
+<form class="button1" onsubmit="buy(5, 400, event)"><button class="button1" type="submit">Buy +5 icepops per click for 400 icepops</button></form>
+<p class="nocursor"></p>
+<form class="button1" onsubmit="buy(15, 800, event)"><button class="button1" type="submit">Buy +15 icepops per click for 800 icepops</button></form>
+<p class="nocursor"></p>
+<form class="button1" onsubmit="rebirth(event)"><button class="button1" type="submit">Rebirth for all icepops minimum of 10000 icepops to rebirth</button></form>
+</div>
+</body>
+</html>
